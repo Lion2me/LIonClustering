@@ -1,12 +1,5 @@
 import re
-
-korean_jamo_pattern = re.compile('[ㄱ-ㅎㅏ-ㅠ/-]')
-
-doublespace_pattern = re.compile('\s+')
-
-korean_pattern = re.compile('[가-힣]')
-
-english_pattern = re.compile('[a-zA-Z]')
+from _regex import korean_pattern, english_pattern, korean_jamo_pattern
 
 def is_korean(char):
     if korean_pattern.match(char):
