@@ -10,4 +10,6 @@ english_pattern = re.compile('[a-zA-Z]')
 
 mean_ful_reg = re.compile('[^가-힣a-zA-Z\s]+')
 
-double_space = re.compile('[\s]+')
+double_space_reg = re.compile('[\s]+')
+
+special_char_reg = re.compile("[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…》]")

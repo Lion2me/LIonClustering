@@ -1,4 +1,4 @@
-from preprocessing.branch_graph import get_character_branch_graph_leftside, get_word_branch_graph_rightside, get_character_branch_graph_rightside, get_word_branch_graph_leftside
+from preprocessing._branch_graph import get_character_branch_graph_leftside, get_word_branch_graph_rightside, get_character_branch_graph_rightside, get_word_branch_graph_leftside
 
 import numpy as np
 from scipy.stats import entropy

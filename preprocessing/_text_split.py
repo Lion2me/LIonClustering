@@ -1,5 +1,10 @@
 from _check import is_jamo_korean , is_korean, is_english
 from soynlp.hangle import decompose,compose
+from _regex import doublespace_pattern
+
+
+def get_word_set(text_list,min_window = 2):
+    return list(filter(lambda x:len(x) >= min_window , ' '.join(text_list).split(' ') ))
 
 def sentence_to_jamo(sent):
 
