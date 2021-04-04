@@ -1,7 +1,18 @@
 from _check import is_jamo_korean , is_korean, is_english
 from soynlp.hangle import decompose,compose
 from _regex import doublespace_pattern
+from collections import defaultdict
 
+# n_gram extractor
+def n_gram_extractor(text_list, window=1):
+    word_dict = defaultdict(int)
+
+    for text in text_list:
+        word_list = text.split(' ')
+        for idx in range(len(word_list) - window):
+            word_dict[' '.join(word_list[idx:idx + window])] += 1
+
+    return word_dict
 
 def get_word_set(text_list,min_window = 2):
     return list(filter(lambda x:len(x) >= min_window , ' '.join(text_list).split(' ') ))
