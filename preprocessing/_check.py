@@ -1,5 +1,5 @@
 import re
-from _regex import korean_pattern, english_pattern, korean_jamo_pattern
+from preprocessing._regex import korean_pattern, english_pattern, korean_jamo_pattern
 
 def is_korean(char):
     if korean_pattern.match(char):
