@@ -1,6 +1,6 @@
-from _check import is_jamo_korean , is_korean, is_english
+from preprocessing._check import is_jamo_korean , is_korean, is_english
 from soynlp.hangle import decompose,compose
-from _regex import doublespace_pattern
+from preprocessing._regex import doublespace_pattern
 from collections import defaultdict
 
 # n_gram extractor
