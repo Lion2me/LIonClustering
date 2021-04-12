@@ -62,13 +62,10 @@ def jamo_to_word_sent(sent_jamo):
     sent = ""
     idx = 0
     while idx < len(sent_jamo)-1:
-#        print(sent_jamo[idx:idx+3])
-#        print(is_jamo_korean(sent_jamo[idx]))
         if(is_jamo_korean(sent_jamo[idx])) :
             sent+=jamo_to_word(sent_jamo[idx:idx+3])
             idx = idx+3
         else:
             sent+=jamo_to_word(sent_jamo[idx:idx+1])
             idx = idx+1
-        print(sent)
     return sent

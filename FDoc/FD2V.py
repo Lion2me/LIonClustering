@@ -8,7 +8,7 @@ from sklearn.neighbors import NearestNeighbors
 
 class fd2v():
 
-    def __init__(self,model_path = './lionlp_fast_model.bin'):
+    def __init__(self,model_path = './lionlp_fast_model.bin',dim = 300):
         # docs는 문자열? 딕셔너리? taggedocument 형태로
         self.docs = []
         # docs를 모델로 바꾸는 것도 만들어야 할 듯
@@ -17,7 +17,7 @@ class fd2v():
         else:
             self.model = None
         self.doc_vecs = False
-        self.dim = self.model.get_word_vector('가').shape[0]
+        self.dim = np.zeros([dim,0],np.float32)
 
     def get_document_vector(self,text):
         return np.array([self.model.get_word_vector(x) for x in text.split(' ')]).mean(axis=0)
@@ -35,7 +35,6 @@ class fd2v():
         for idx , text in enumerate(texts):
             vec = np.array([self.model.get_word_vector(x) for x in text]).mean(axis=0)
             if (type(text) != str or vec.shape == ()):
-                print(text)
                 continue
 #            all_vector.append(np.array([self.model.get_word_vector(x) for x in text]).mean(axis=0))
             all_vector.append(vec)
@@ -51,7 +50,11 @@ class fd2v():
         else:
             print("추후에 문장을 단어 및 자모로 변환하고 파일을 빼는 것 필요")
             print("실제로 모델을 만드는 과정 - 모든 파라미터는 사용 할 수 있도록 하자")
-
+    def load_docs_vector(self, path = ''):
+        if(os.path.exists(path) == True):
+            self.doc_vecs = np.load
+        else:
+            print('없음')
     # 추후에 knn알고리즘의 세부 설정은 지정하자 ( 2021 - 03 - 11 )
     def fit_knn_docs(self,N=10,dist_func = 'cosine'):
         self.nbrs = NearestNeighbors(n_neighbors=N, metric=dist_func).fit(self.doc_vecs)
@@ -73,3 +76,5 @@ class fd2v():
                 heapq.heappop(heap)
                 heapq.heappush(heap,(-dist,dist,idx))
         return heap
+    def get_similar_word(self,X):
+        return self.model.get_nearest_neighbors(X)
