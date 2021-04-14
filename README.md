@@ -2,8 +2,6 @@
 
 Jupyter notebook 환경에서 진행 후 올리므로 최적화까지 시간이 걸립니다.
 
-## Lion2me의 NLP 공부 라이브러리입니다.
-
 1. Clustering [ K-Means ]
 
 K-Means 클러스터링을 구현해보았습니다.
