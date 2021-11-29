@@ -101,3 +101,62 @@ model.get_similar_key_docs(input_,petitions_text)
  (-0.47793502, 0.47793502, 391832)]
 
 ```
+
+이 기능을 이용해서 두 문장의 등장 단어 전체를 비교해서 나온 유사도를 평균을 리턴해주는 함수를 만들어보았습니다.
+
+```python
+# X - STRING
+# Y - STRING LIST
+
+def get_similar_key_docs_score(self,X,Y,N=10,dist_func = 'cosine'):
+
+    score = 0
+    for idx,text in enumerate(Y):
+        dist = np.min(pairwise_distances(self.get_word_vectors(X),self.get_word_vectors(text),metric = dist_func),axis=1).sum()
+        score += dist
+
+    return score/len(Y)
+    
+4.156350175539653
+
+```
+
+화장품 관련 커뮤니티를 약간 크롤링해서 어떤 방식으로 사용 할 수 있는지 예제를 만들어보았습니다.
+글로우픽이라는 화장품 리뷰 데이터와 상품 설명 데이터를 수집하여 다음과 같은 서비스를 만들어보았습니다.
+
+```python
+from util.tagging import tagging
+from FDoc.fd2v import fd2v
+
+tag = tagging()
+
+# cc.ko.300.bin은 위키피디아 정보로 만들어진 Pretrained FastText입니다.
+model = fd2v('../data/cc.ko.300.bin')
+
+scores = [ ( item_df['brand'][i] ,item_df['product'][i], model.get_similar_key_docs_score(sent[0],item_df['review'][i]+item_df['desc'][i]+ [item_df['product'][i]] ) ) for i in range(len(item_df)) ]
+scores = sorted(scores, key=lambda x:x[2])
+
+sent = ['기초부터 피부를 탄탄하게 다져주어 피부결을 부드럽고 촉촉하게 도와주는 에센스 토너']
+sent = tag.get_pos(sent,pos=POS,result_type = 'str')
+print(sent)
+# 결과는 '기초 피부 탄탄 주 부결 부드럽 촉촉 주 에센스 토너'
+
+scores = [ ( item_df['brand'][i] ,item_df['product'][i], model.get_similar_key_docs_score(sent[0],item_df['review'][i]+item_df['desc'][i]+ [item_df['product'][i]] ) ) for i in range(len(item_df)) ]
+scores = sorted(scores, key=lambda x:x[2])
+
+#[('루트리 (ROOTREE)', '피토 그라운드 딥 컴포트 크림 토너', 4.156350175539653),
+# ('스킨알엑스랩 (SKINRx LAB)', '더블 에센스 토너', 4.212137651443482),
+# ('쁘띠페 (PETITFEE)', '에너지 앰플 패드', 4.240628549030849),
+# ('라포티셀 (LAPOTHICELL)', '오일 컷 클레이 로션', 4.2827998995780945),
+# ('노멀노모어 (NORMAL NOMORE)', '안티 드라이 인텐시브 토너', 4.314711830832741),
+# ('펠드아포테케 (Feld apotheke)', '이뮨셀 트리트먼트', 4.403622309366862),
+# ('이네이처 (E nature)', '버치 주스 하이드로 에센스 스킨', 4.468891962980613),
+# ('라곰 (LAGOM)', '셀러스 리바이브 에센 토너', 4.480025457172859),
+# ('땡큐파머(THANK YOU FARMER)', '강화 교동쌀 맑음 에센셜 토너', 4.486284136772156),
+# ('BRTC (비알티씨)', '더 퍼스트 앰플 에센스', 4.503092235209895),
+# ...
+```
+
+리뷰 정보를 기반으로 입력 한 문장에 관련해서 가장 가까운 리뷰 및 상품 정보를 얻을 수 있습니다.
+하지만 이 알고리즘의 동작 속도가 매우 느리기 때문에 중간 정보를 이용해서 학습을 유지하는 방향으로 동작하면 더 좋을 것 같습니다.
+
