@@ -133,9 +133,6 @@ tag = tagging()
 # cc.ko.300.bin은 위키피디아 정보로 만들어진 Pretrained FastText입니다.
 model = fd2v('../data/cc.ko.300.bin')
 
-scores = [ ( item_df['brand'][i] ,item_df['product'][i], model.get_similar_key_docs_score(sent[0],item_df['review'][i]+item_df['desc'][i]+ [item_df['product'][i]] ) ) for i in range(len(item_df)) ]
-scores = sorted(scores, key=lambda x:x[2])
-
 sent = ['기초부터 피부를 탄탄하게 다져주어 피부결을 부드럽고 촉촉하게 도와주는 에센스 토너']
 sent = tag.get_pos(sent,pos=POS,result_type = 'str')
 print(sent)
